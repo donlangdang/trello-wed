@@ -1,0 +1,7 @@
+{ // cái này để crtl click vào link thì vào linh đó được khi setup ~/
+  "compilerOptions": {
+    "paths": {
+      "~/*": ["./src/*"],
+    },
+  }
+}
