@@ -14,18 +14,19 @@ import Workspace from './Menus/Workspace'
 import Recents from './Menus/Recents'
 import Starred from './Menus/Starred'
 import Templates from './Menus/Templates'
-import { Button } from '@mui/material'
+import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Badge from '@mui/material/Badge'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import Tooltip from '@mui/material/Tooltip'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profiles from './Menus/Profiles'
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 
 
 export default function AppBar() {
   return (
-    <Box px={2} sx={{
+    <Box sx={{
       width: '100%',
       height: (theme) => theme.trelloCustom.appBoardHeight,
       // display: flex va alignItems: 'center' dung de can giua noi dung theo chieu doc
@@ -33,6 +34,7 @@ export default function AppBar() {
       alignItems: 'center',
       justifyContent: 'space-between',
       gap: 2,
+      paddingX: 2,
       overflowX: 'auto'
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -46,7 +48,7 @@ export default function AppBar() {
           <Recents />
           <Starred />
           <Templates />
-          <Button variant="outlined">Create</Button>
+          <Button variant="outlined" startIcon={<LibraryAddIcon />}>Create</Button>
         </Box>
       </Box>
 
