@@ -28,7 +28,7 @@ export default function BoardBar() {
   return (
     <Box sx={{
       width: '100%',
-      height: (theme) => theme.trelloCustom.boardBoardHeight,
+      height: (theme) => theme.trello.boardBoardHeight,
       // display: flex va alignItems: 'center' dung de can giua noi dung theo chieu doc
       display: 'flex',
       alignItems: 'center',

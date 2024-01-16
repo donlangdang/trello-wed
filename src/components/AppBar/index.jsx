@@ -34,7 +34,7 @@ export default function AppBar() {
   return (
     <Box sx={{
       width: '100%',
-      height: (theme) => theme.trelloCustom.appBoardHeight,
+      height: (theme) => theme.trello.appBoardHeight,
       // display: flex va alignItems: 'center' dung de can giua noi dung theo chieu doc
       display: 'flex',
       alignItems: 'center',
