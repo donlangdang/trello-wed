@@ -3,6 +3,8 @@ import Container from '@mui/material/Container'
 import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
+
+// import { mockData } from '~/apis/mock-data'
 import { fetchBoardDetialsAPI } from '~/apis'
 
 function Board() {
@@ -10,7 +12,7 @@ function Board() {
 
   useEffect(() => {
     // react-router-dom
-    const boardId = '65be4cbf4858d60d2200c7dd'
+    const boardId = '65c0fc7917e1d2df63ce8fe9'
     // Call Api
     fetchBoardDetialsAPI(boardId).then(board => {
       setBoard(board)
