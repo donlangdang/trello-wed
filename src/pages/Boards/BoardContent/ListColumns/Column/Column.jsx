@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 import { Box, Typography } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import React from 'react'
@@ -60,7 +61,7 @@ function Column({ column }) {
 
   const addNewCard = () => {
     if (!newCardTitle) {
-      // console.error('Please enter Column Title!')
+      toast.error('Please enter Card Title!')
       return
     }
     // gọi API ở đây
