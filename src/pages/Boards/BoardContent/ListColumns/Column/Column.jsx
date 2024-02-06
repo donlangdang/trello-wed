@@ -22,7 +22,7 @@ import { mapOrder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import CloseIcon from '@mui/icons-material/Close'
-import theme from '~/theme'
+// import theme from '~/theme'
 
 
 function Column({ column }) {
