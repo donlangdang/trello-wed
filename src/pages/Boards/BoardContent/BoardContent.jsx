@@ -28,7 +28,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
-export default function BoardContent({ board }) {
+export default function BoardContent({ board, createNewColumn, createNewCard }) {
   // https://docs.dndkit.com/api-documentation/sensors
   // nếu dùng PointerSensor mặc định thì phải kết hợp thuộc tính CSS touch-action: none ở những phần tử kéo thả-nhưng mà con bug đó nha
   // const pointerSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -332,7 +332,11 @@ export default function BoardContent({ board }) {
         height: (theme) => theme.trello.boardContentHeight,
         p: '10px 0'
       }}>
-        <ListColumns columns={orderedColumns}/>
+        <ListColumns
+          columns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+        />
         <DragOverlay dropAnimation={customDropAnimation}>
           {!activeDragItemType && null}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData}/>}
