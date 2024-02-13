@@ -26,7 +26,7 @@ import CloseIcon from '@mui/icons-material/Close'
 // import theme from '~/theme'
 
 
-function Column({ column }) {
+function Column({ column, createNewCard }) {
   const {
     attributes,
     listeners,
@@ -59,12 +59,18 @@ function Column({ column }) {
 
   const [newCardTitle, setNewCardTitle] = useState('')
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please enter Card Title!')
       return
     }
     // gọi API ở đây
+    // tạo dữ liệu card để gọi API
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id
+    }
+    await createNewCard(newCardData)
 
     // Đóng lại trạng thái thêm Column mới và Clear input
     toggleopenNewCardForm()
