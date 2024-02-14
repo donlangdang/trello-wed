@@ -1,6 +1,5 @@
 import { Box } from '@mui/material'
 import ListColumns from './ListColumns/ListColumns'
-import { mapOrder } from '~/utils/sorts'
 import {
   DndContext,
   // PointerSensor,
@@ -28,7 +27,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
-export default function BoardContent({ board, createNewColumn, createNewCard }) {
+export default function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn }) {
   // https://docs.dndkit.com/api-documentation/sensors
   // nếu dùng PointerSensor mặc định thì phải kết hợp thuộc tính CSS touch-action: none ở những phần tử kéo thả-nhưng mà con bug đó nha
   // const pointerSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -56,8 +55,9 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
   const lastOverId = useRef(null)
 
   useEffect(() => {
-    const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
-    setOrderedColumns(orderedColumns)
+    // const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
+    // columns đã được sắp xếp ở component cha cao nhất (board/_id.jsx)
+    setOrderedColumns(board.columns)
   }, [board])
 
   // tìm 1 cái column theo cardId
@@ -213,6 +213,7 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
         const newCardIndex = overColumn?.cards?.findIndex(c => c._id === overCardId)
         // dùng arrayMove vì kéo card trong 1 column tương tự như kéo column trong boardcontent
         const dndOrderedCards = arrayMove(oldColumnWhenDraggingCard?.cards, oldCardIndex, newCardIndex)
+        const dndOrderedCardIds = dndOrderedCards.map(card => card._id)
         // console.log('dndOrderedCards: ', dndOrderedCards)
         setOrderedColumns(prevColumns => {
           // clone mảng OrderedColumnsState cũ ra một cái mới để xử lí data rồi return cập nhật lại OrderedColumnsState mới
@@ -221,10 +222,15 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
           const targetColumn = nextColumns.find(column => column._id === overColumn._id)
           // cập nhật lại 2 giá trị mới là card và cardOrderIds trong targetColumn
           targetColumn.cards = dndOrderedCards
-          targetColumn.cardOrderIds = dndOrderedCards.map(card => card._id)
+          targetColumn.cardOrderIds = dndOrderedCardIds
           // trả về giá trị state mới (chuẩn vị trí)
           return nextColumns
         })
+        // gọi lên props func moveCardInTheSameColumn nằm ở component cha cao nhất (board/_id.jsx)
+        // học redux để đưa dữ liệu Board ra ngoài redux Global Store.
+        // lúc này có thể gọi luôn API ở đây thay vì phải lần lượt gọi ngược lên những component cha phía trên
+        // học redux để clean code chuẩn chỉnh
+        moveCardInTheSameColumn(dndOrderedCards, dndOrderedCardIds, oldColumnWhenDraggingCard._id)
       }
     }
     // xử lí kéo thả column
@@ -240,13 +246,15 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
         // dung arrayMove của dnd-kit để sắp xếp lại mảng columns ban đầu
         // code của arryMove ở đây: dnd-kit/packages/sortable/src/utilities/arrayMove.ts
         const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
+
+        // cập nhật lại state(vị trí) column ban đầu sau khi kéo thả
+        setOrderedColumns(dndOrderedColumns)
+
         // const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
         // 2 console.log dữ liệu này để sau này xử lí goi API
         // console.log('dndOrderedColumnsIds: ', dndOrderedColumnsIds)
         // console.log('dndOrderedColumns: ', dndOrderedColumns)
-
-        // cập nhật lại state(vị trí) column ban đầu sau khi kéo thả
-        setOrderedColumns(dndOrderedColumns)
+        moveColumns(dndOrderedColumns)
       }
     }
     //nếu vị trí sau khi kéo thả khác với vị trí ban đầu
