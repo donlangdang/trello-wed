@@ -14,7 +14,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
 
   const [newColumnTitle, setNewColumnTitle] = useState('')
 
-  const addNewColumn = async () => {
+  const addNewColumn = () => {
     if (!newColumnTitle) {
       toast.error('Please enter Column Title!')
     }
@@ -28,7 +28,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
     // học redux để đưa dữ liệu Board ra ngoài redux global store.
     // học redux xong thì có thể gọi api luôn thay vì phải gọi ngược lên nhũng component cha
     // sử dụng redux thì sẽ clean code và chuẩn chỉnh hơn
-    await createNewColumn(newColumnData)
+    createNewColumn(newColumnData)
 
     // Đóng lại trạng thái thêm Column mới và Clear input
     toggleopenNewColumnForm()
