@@ -27,7 +27,14 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
-export default function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn }) {
+export default function BoardContent({
+  board,
+  createNewColumn,
+  createNewCard,
+  moveColumns,
+  moveCardInTheSameColumn,
+  moveCardToDifferentColumn
+}) {
   // https://docs.dndkit.com/api-documentation/sensors
   // nếu dùng PointerSensor mặc định thì phải kết hợp thuộc tính CSS touch-action: none ở những phần tử kéo thả-nhưng mà con bug đó nha
   // const pointerSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -74,7 +81,8 @@ export default function BoardContent({ board, createNewColumn, createNewCard, mo
     over,
     activeColumn,
     activeDraggingCardId,
-    activeDraggingCardData
+    activeDraggingCardData,
+    triggerFrom
   ) => {
     setOrderedColumns(prevColumns => {
       // tìm vị trí index của overCard trong column đích(nơi activeCard sắp được thả)
@@ -118,6 +126,22 @@ export default function BoardContent({ board, createNewColumn, createNewCard, mo
         nextOverColumn.cards = nextOverColumn.cards.filter(card => !card.FE_PlaceholderCard)
         // cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
+      }
+
+      // nếu func này được gọi từ handleDragEnd nghĩa là đã kéo thả xong, lúc này gọi api  xử lí 1 lần ở đây.
+      if (triggerFrom === 'handleDragEnd') {
+        /**
+         * gọi lên props func moveCardToDifferentColumn nằm ở component cha cao nhất (board/_id.jsx)
+         * học redux sẽ đưa dữ liệu board ra ngoài Redux Global Store.
+         * lúc này thì gọi API luôn ở đây là xong thay vì phải đi ngược lên những component cha phía trên.
+         * phải dùng tới activeDragItemData.columnId hoặc tốt hơn là oldColumnWhenDraggingCard._id (set vào state từ bước handleDragStart) chứ không phải dùng activeData trong scope handleDragEnd này vì sau khi đi qua onDragOver và tới đây là state của card đã bị cập nhật 1 lần rồi.
+         */
+        moveCardToDifferentColumn(
+          activeDraggingCardId,
+          oldColumnWhenDraggingCard._id,
+          nextOverColumn._id,
+          nextColumns
+        )
       }
       // console.log('overCardIndex: ', overCardIndex)
       return nextColumns
@@ -167,7 +191,8 @@ export default function BoardContent({ board, createNewColumn, createNewCard, mo
         over,
         activeColumn,
         activeDraggingCardId,
-        activeDraggingCardData
+        activeDraggingCardData,
+        'handleDragOver'
       )
     }
   }
@@ -201,7 +226,8 @@ export default function BoardContent({ board, createNewColumn, createNewCard, mo
           over,
           activeColumn,
           activeDraggingCardId,
-          activeDraggingCardData
+          activeDraggingCardData,
+          'handleDragEnd'
         )
       } else {
         // hành động kéo thả card trong cùng 1 column
