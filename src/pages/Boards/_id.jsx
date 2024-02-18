@@ -82,7 +82,6 @@ function Board() {
         columnToUpdate.cards.push(createdCard)
         columnToUpdate.cardOrderIds.push(createdCard._id)
       }
-        console.log("🚀 ~ createNewCard ~ columnToUpdate:", columnToUpdate)
     }
     // console.log("🚀 ~ createNewCard ~ columnToUpdate:", columnToUpdate)
     setBoard(newBoard)
