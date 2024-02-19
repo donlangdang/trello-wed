@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import LightModeIcon from '@mui/icons-material/LightMode'
-import DarkModeOutLinedIcon from '@mui/icons-material/DarkModeOutLined'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness'
 import { Box } from '@mui/material'
 
@@ -43,17 +43,17 @@ function ModeSelect() {
       >
         <MenuItem value="light">
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <LightModeIcon fontSize='small' /> Light
+            <LightModeIcon/> Light
           </Box>
         </MenuItem>
         <MenuItem value="dark">
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <DarkModeOutLinedIcon fontSize='small' /> Dark
+            <DarkModeIcon /> Dark
           </Box>
         </MenuItem>
         <MenuItem value="system">
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <SettingsBrightnessIcon fontSize='small' /> System
+            <SettingsBrightnessIcon/> System
           </Box>
         </MenuItem>
       </Select>
